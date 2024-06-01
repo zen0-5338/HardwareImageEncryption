@@ -160,7 +160,9 @@ cython_debug/
 #.idea/
 
 # Project specific
-rtl_verilog/
+rtl_verilog/**/*.sv
+rtl_verilog/**/*.v
 sim_output/
-tb_verilog/
+tb_verilog/**/*.v
+tb_verilog/**/*.sv
 data/
