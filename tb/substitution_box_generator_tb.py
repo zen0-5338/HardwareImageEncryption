@@ -20,80 +20,86 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# File Paths for storing output
-x1_output_file_path = "../sim_output/x1_wave.txt"
-x2_output_file_path = "../sim_output/x2_wave.txt"
-x3_output_file_path = "../sim_output/x3_wave.txt"
+substitution_box_output_file_path = "../sim_output/substitution_box.txt"
 
 # Variables to configure simulation
 simulation_timescale_precision = "10ps"
 simulation_timescale_step = "1ns"
 simulation_clock_period = 10
-# Number of output values to generate
-num_output_samples = 20000
 
-# Verilog hexadecimal representation of IEEE 754 single precision
-# initial values of chaos signal generator inputs
-x1_initial_value_hex = "'h3dcccd53"
-x2_initial_value_hex = "'h3c23d70a"
-x3_initial_value_hex = "'h0"
+# Module parameters
+table_rows = 16
+key_size = 128
 
 print(
     f"""\
 `include "../rtl_verilog/chaos_signal_generator.v"
-
-`timescale {simulation_timescale_step}/{simulation_timescale_precision}
+`include "../rtl_verilog/substitution_box_generator.v"
 
 `define CLOCK_PERIOD {simulation_clock_period}
 
-module chaos_signal_generator_tb;
+module substitution_box_generator_tb;
+
+    localparam TABLE_ROWS = {table_rows};
+    localparam KEY_SIZE = {key_size};
 
     reg clk;
-    reg rst;
+    reg reset = 'b1;
+    reg enable_bar = 'b0;
+    wire [31:0] chaotic_signal_x1, chaotic_signal_x2, chaotic_signal_x3;
     reg [31:0] x1_initial, x2_initial, x3_initial;
-    wire [31:0] x1_out, x2_out, x3_out;
-
-    localparam samples = {num_output_samples};
+    wire ready;
     
-    chaos_signal_generator DUT(
-        x1_out,
-        x2_out,
-        x3_out,
+    wire [KEY_SIZE-1:0] substitution_box_row[0:TABLE_ROWS-1];
+
+    chaos_generator chaos_generator_object(
+        chaotic_signal_x1,
+        chaotic_signal_x2,
+        chaotic_signal_x3,
         x1_initial,
         x2_initial,
         x3_initial,
         clk,
-        rst
+        reset
     );
+    
+    substitution_box_generator DUT("""
+)
+for i in range(table_rows):
+    print(
+        f"""\
+        substitution_box_row[{i}],"""
+    )
+    
+print(
+    f"""\
+        ready,
+        chaotic_signal_x1,
+        chaotic_signal_x2,
+        chaotic_signal_x3,
+        reset,
+        enable_bar,
+        clk
+    );
+
+    reg [KEY_SIZE-1:0] mem[0:TABLE_ROWS-1];
 
     always #(`CLOCK_PERIOD/2) clk = ~clk;
 
     initial	begin
         clk = 1'b0;
-        x1_initial = {x1_initial_value_hex};
-        x2_initial = {x2_initial_value_hex};
-        x3_initial = {x3_initial_value_hex};
-        rst = 1'b1;
-        #(`CLOCK_PERIOD + 3);
-        rst = 1'b0;
-    end
-
-    reg [31:0] x1_mem[0:samples-1];
-    reg [31:0] x2_mem[0:samples-1];
-    reg [31:0] x3_mem[0:samples-1];
-    int i;
-    initial	begin
-        i=0;
-        while(i < samples) begin
-            @(posedge clk);
-            x1_mem[i] = x1_out;
-            x2_mem[i] = x2_out;
-            x3_mem[i] = x3_out;
-            i = i+1;
-        end
-        $writememh({x1_output_file_path},x1_mem);
-        $writememh({x2_output_file_path},x2_mem);
-        $writememh({x3_output_file_path},x3_mem);
+        enable_bar = 1'b0;
+        reset = 1'b1;
+        x1_initial = 32'h3DCC_CD53; // 0.1
+        x2_initial = 32'h3C23_D70A; // 0.01
+        x3_initial = 32'h0;
+        #`CLOCK_PERIOD reset = 'b0;
+        
+        wait(ready == 1);
+        for (integer i = 0; i < TABLE_ROWS; i++) begin
+                mem[i] = sbox_row[i];
+            end
+        $writememh({substitution_box_output_file_path}, mem);
         $stop();
     end
 
