@@ -1,3 +1,5 @@
+sawtooth_output_file_path = "../sim_output/sawtooth_wave_output.txt"
+
 print(
     f"""\
 `include "../rtl_verilog/sawtooth_wave_generator.v
@@ -36,7 +38,7 @@ module sawtooth_wave_generator_tb;
             x_in = output_mem[i];
             i = i+1;
         end
-        $writememh("../sim_output/sawtooth_wave_output.txt", output_mem);
+        $writememh({sawtooth_output_file_path}, output_mem);
         $stop();
     end
 
