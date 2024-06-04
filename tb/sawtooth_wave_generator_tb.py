@@ -21,14 +21,14 @@
 # SOFTWARE.
 
 
-# Variables to configure simulation
-simulation_timescale_precision = '10ps'
-simulation_timescale_step = '1ns'
-simulation_clock_period = 10
-# Number of output values to generate 
-num_output_samples = 1000
-
 sawtooth_output_file_path = "../sim_output/sawtooth_wave_output.txt"
+
+# Variables to configure simulation
+simulation_timescale_precision = "10ps"
+simulation_timescale_step = "1ns"
+simulation_clock_period = 10
+# Number of output values to generate
+num_output_samples = 1000
 
 print(
     f"""\
