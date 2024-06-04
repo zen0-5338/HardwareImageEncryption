@@ -21,13 +21,17 @@
 # SOFTWARE.
 
 
+# Variables to configure simulation timescale
+timescale_precision = '10ps'
+timescale_step = '1ns'
+
 sawtooth_output_file_path = "../sim_output/sawtooth_wave_output.txt"
 
 print(
     f"""\
 `include "../rtl_verilog/sawtooth_wave_generator.v
 
-`timescale 1ns/10ps
+`timescale {timescale_step}/{timescale_precision}
 
 `define CLOCK_PERIOD 10
 
