@@ -20,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 # File Paths for storing output
 x1_output_file_path = "../sim_output/x1_wave.txt"
 x2_output_file_path = "../sim_output/x2_wave.txt"

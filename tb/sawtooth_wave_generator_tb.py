@@ -20,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 sawtooth_output_file_path = "../sim_output/sawtooth_wave_output.txt"
 
 # Variables to configure simulation
