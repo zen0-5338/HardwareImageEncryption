@@ -21,9 +21,12 @@
 # SOFTWARE.
 
 
-# Variables to configure simulation timescale
-timescale_precision = '10ps'
-timescale_step = '1ns'
+# Variables to configure simulation
+simulation_timescale_precision = '10ps'
+simulation_timescale_step = '1ns'
+simulation_clock_period = 10
+# Number of output values to generate 
+num_output_samples = 1000
 
 sawtooth_output_file_path = "../sim_output/sawtooth_wave_output.txt"
 
@@ -31,9 +34,9 @@ print(
     f"""\
 `include "../rtl_verilog/sawtooth_wave_generator.v
 
-`timescale {timescale_step}/{timescale_precision}
+`timescale {simulation_timescale_step}/{simulation_timescale_precision}
 
-`define CLOCK_PERIOD 10
+`define CLOCK_PERIOD {simulation_clock_period}
 
 module sawtooth_wave_generator_tb;
 
@@ -42,7 +45,7 @@ module sawtooth_wave_generator_tb;
     wire [31:0] y_out;
     reg[31:0] swap;
 
-    localparam samples = 1000;
+    localparam samples = {num_output_samples};
 
     reg [31:0] output_mem[0:samples-1];
     
