@@ -26,13 +26,13 @@ print(
 `include "../include/adder/float_adder_v2.v"
 
 module sawtooth_wave(
-    output [31:0] y_out,
-    output y_out_val,
-    input [31:0] x_in,
-    input x_in_val,
-    input y_out_rdy,
-    input clk,
-    input rstn
+    output wire [31:0] y_out,
+    output wire y_out_val,
+    input wire [31:0] x_in,
+    input wire x_in_val,
+    input wire y_out_rdy,
+    input wire clk,
+    input wire rstn
 );
 
     wire x_sign;
