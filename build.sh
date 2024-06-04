@@ -24,7 +24,7 @@
 
 
 # Create folders
-mkdir data, rtl_verilog, sim_output, tb_verilog
+mkdir -p data, rtl_verilog, sim_output, tb_verilog
 
 # Generate source files
 for python_file in $(find ./rtl -name *.py)
