@@ -22,8 +22,11 @@ REM SOFTWARE.
 
 @echo off
 
-REM Generate source files
-for %%A IN (.\\rtl\\*.py) do start /b /wait "" python "%%~fA" > ".\\rtl_verilog\\%%~nA.v"
+REM Create folders
+mkdir data, rtl_verilog, sim_output, tb_verilog
 
-REM Generate testbenches
-for %%A IN (.\\tb\\*.py) do start /b /wait "" python "%%~fA" > ".\\tb_verilog\\%%~nA.sv"
+REM Install Python dependencies
+pip install -r requirements.txt
+
+REM Generate source files and testbenches
+build.bat

@@ -2,7 +2,7 @@
 Final Year Project
 Original Code: https://github.com/Sheldon38/Mars
 
-<h4>Please run the `build` script for setup.</h4>
+<h4>Please run the `setup` script for setup.</h4>
 
 Dependencies:
 <ol>

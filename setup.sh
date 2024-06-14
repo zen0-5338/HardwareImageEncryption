@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # MIT License
 #
 # Copyright (c) 2024 zen0-5338
@@ -22,16 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Generate source files
-for python_file in $(find ./rtl -name *.py)
-do
-    filename=$(basename "$python_file")
-    nohup python $python_file > ./rtl_verilog/${filename%.*}.v & disown
-done
+# Create folders
+mkdir -p data, rtl_verilog, sim_output, tb_verilog
 
-# Generate testbenches
-for python_file in $(find ./tb -name *.py)
-do
-    filename=$(basename "$python_file")
-    nohup python $python_file > ./tb_verilog/${filename%.*}.sv & disown
-done
+# Install python dependencies
+pip install -r requirements.txt
+
+# Generate source files and testbenches
+build.sh
